@@ -1,0 +1,42 @@
+#if($packageName)
+package ${packageName};
+#end
+
+import java.sql.Types;
+import java.util.Date;
+import java.util.Map;
+import java.math.BigDecimal;
+import jp.co.flect.sql.Table;
+
+public class $table.clazzName extends $superClazz {
+	
+#foreach ($col in $table.colList)
+	public static final String $col.declareName = "$col.name";
+#end
+	
+	public ${table.clazzName}() {
+		super("$table.name", $table.useSerialKey());
+	}
+	
+	public ${table.clazzName}(Map<String, Object> map) {
+		this();
+		setValueMap(map);
+	}
+	
+	protected void init() {
+#foreach ($col in $table.colList)
+		addField($col.declareName, Types.${col.typeString}, ${col.isPrimaryKey()});
+#end
+	}
+	
+#foreach ($col in $table.colList)
+	public $col.javaType get${col.namePascalCase}() {
+		return doGet${col.javaTypePascalCase}($col.declareName);
+	}
+	
+	public void set${col.namePascalCase}($col.javaType v) {
+		set($col.declareName, v);
+	}
+#end
+	
+}

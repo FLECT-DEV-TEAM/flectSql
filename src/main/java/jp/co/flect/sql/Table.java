@@ -210,6 +210,10 @@ public abstract class Table implements Selectable {
 		return b != null && b.booleanValue();
 	}
 	
+	protected byte[] doGetBytes(String name) {
+		return (byte[])get(name);
+	}
+	
 	protected Date doGetDate(String name) {
 		return (Date)get(name);
 	}
