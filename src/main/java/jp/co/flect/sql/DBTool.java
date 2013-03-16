@@ -86,6 +86,8 @@ public class DBTool {
 			stmt.setDate(idx, (java.sql.Date)o);
 		} else if (o instanceof Timestamp) {
 			stmt.setTimestamp(idx, (Timestamp)o);
+		} else if (o instanceof byte[]) {
+			stmt.setBytes(idx, (byte[])o);
 		} else {
 			throw new IllegalStateException(o.getClass().toString());
 		}
