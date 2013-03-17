@@ -243,8 +243,14 @@ public class SelectBuilder implements Selectable {
 	}
 	
 	/**
-	 * OFFSET句を設定します<br>
-	 * @param n Offset。Offsetにパラメータを使用する場合はOFFSET_PARAMを設定してください
+	 * OFFSET句にパラメータを使用します
+	 */
+	public SelectBuilder offset() {
+		return offset(OFFSET_PARAM);
+	}
+	
+	/**
+	 * OFFSET句を設定します
 	 */
 	public SelectBuilder offset(int n) {
 		this.offset = n;
@@ -252,8 +258,14 @@ public class SelectBuilder implements Selectable {
 	}
 	
 	/**
-	 * LIMIT句を設定します<br>
-	 * @param n Limit。Limitにパラメータを使用する場合はLIMIT_PARAMを設定してください
+	 * LIMIT句にパラメータを使用します
+	 */
+	public SelectBuilder limit() {
+		return limit(LIMIT_PARAM);
+	}
+	
+	/**
+	 * LIMIT句を設定します
 	 */
 	public SelectBuilder limit(int n) {
 		this.limit = n;
