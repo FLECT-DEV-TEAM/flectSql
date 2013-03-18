@@ -56,7 +56,6 @@ public class TableSourceGenerator {
 		}
 		DatabaseMetaData meta = con.getMetaData();
 		Set<String> keySet = new HashSet<String>();
-		boolean useSerial = false;
 		ResultSet rs = meta.getPrimaryKeys(null, schemaName, tableName);
 		try {
 			while (rs.next()) {
@@ -74,12 +73,12 @@ public class TableSourceGenerator {
 				String name = rs.getString(4);
 				int type = rs.getInt(5);
 				boolean pk = keySet.contains(name);
-				boolean autoInc = rs.getBoolean(23);
+				boolean autoInc = "YES".equals(rs.getString(23));
 				
 				ColumnInfo col = new ColumnInfo(name, type, pk);
 				table.addColumn(col);
 				if (pk && keySet.size() == 1 && autoInc) {
-					useSerial = true;
+					table.setUseSerialKey(true);
 				}
 			}
 		} finally {
