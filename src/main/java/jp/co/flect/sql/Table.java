@@ -32,7 +32,11 @@ public abstract class Table implements Selectable {
 	}
 	
 	protected void setValueMap(Map<String, Object> map) {
-		this.valueMap = new HashMap<String, Object>(map);
+		for (Map.Entry<String, Object> entry : map.entrySet()) {
+			if (hasField(entry.getKey())) {
+				this.valueMap.put(entry.getKey(), entry.getValue());
+			}
+		}
 	}
 	
 	/**
