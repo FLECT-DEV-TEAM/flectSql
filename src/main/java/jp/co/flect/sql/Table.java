@@ -9,7 +9,7 @@ import javax.swing.event.EventListenerList;
 import java.util.Date;
 import java.math.BigDecimal;
 
-public abstract class Table implements Selectable {
+public abstract class Table implements Selectable, Cloneable {
 	
 	protected abstract void init();
 	
@@ -35,7 +35,7 @@ public abstract class Table implements Selectable {
 		return new HashMap<String, Object>(this.valueMap);
 	}
 	
-	protected void setValueMap(Map<String, Object> map) {
+	public void setValueMap(Map<String, Object> map) {
 		for (Map.Entry<String, Object> entry : map.entrySet()) {
 			if (hasField(entry.getKey())) {
 				this.valueMap.put(entry.getKey(), entry.getValue());
@@ -340,6 +340,20 @@ public abstract class Table implements Selectable {
 		
 		public int hashCode() {
 			return name.hashCode();
+		}
+	}
+	
+	public Table clone() {
+		try {
+			Table ret = (Table)super.clone();
+			ret.fieldMap = new LinkedHashMap<String, Field>();
+			ret.valueMap = new HashMap<String, Object>();
+			ret.listenerList = new EventListenerList();
+			ret.initialized = false;
+			ret.doInit();
+			return ret;
+		} catch (CloneNotSupportedException e) {
+			throw new IllegalStateException(e);
 		}
 	}
 }

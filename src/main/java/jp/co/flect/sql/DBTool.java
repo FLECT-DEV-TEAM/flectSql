@@ -139,6 +139,48 @@ public class DBTool {
 		}
 	}
 	
+	public <T extends Table> T select(SelectBuilder builder, T table, Object... params) throws SQLException {
+		PreparedStatement stmt = con.prepareStatement(builder.toSQL());
+		try {
+			setParameters(stmt, params);
+			ResultSet rs = stmt.executeQuery();
+			try {
+				if (rs.next()) {
+					T ret = (T)table.clone();
+					ret.setValueMap(builder.map(rs));
+					return ret;
+				} else {
+					return null;
+				}
+			} finally {
+				rs.close();
+			}
+		} finally {
+			stmt.close();
+		}
+	}
+	
+	public <T extends Table> List<T> selectList(SelectBuilder builder, T table, Object... params) throws SQLException {
+		PreparedStatement stmt = con.prepareStatement(builder.toSQL());
+		try {
+			setParameters(stmt, params);
+			ResultSet rs = stmt.executeQuery();
+			try {
+				List<T> list = new ArrayList<T>();
+				while (rs.next()) {
+					T ret = (T)table.clone();
+					ret.setValueMap(builder.map(rs));
+					list.add(ret);
+				}
+				return list;
+			} finally {
+				rs.close();
+			}
+		} finally {
+			stmt.close();
+		}
+	}
+	
 	/**
 	 * 件数取得SQLを実行する汎用メソッド
 	 */
