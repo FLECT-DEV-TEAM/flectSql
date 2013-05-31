@@ -497,6 +497,7 @@ public class SelectBuilder implements Selectable {
 					break;
 				case Types.BLOB:
 				case Types.BINARY:
+				case Types.LONGVARBINARY:
 					value = rs.getBytes(i+1);
 					break;
 				case Types.BIT:
@@ -510,6 +511,8 @@ public class SelectBuilder implements Selectable {
 				case Types.NVARCHAR:
 				case Types.SQLXML:
 				case Types.VARCHAR:
+				case Types.LONGNVARCHAR:
+				case Types.LONGVARCHAR:
 					value = rs.getString(i+1);
 					break;
 				case Types.DATE:
@@ -547,9 +550,6 @@ public class SelectBuilder implements Selectable {
 				case Types.DATALINK:
 				case Types.DISTINCT:
 				case Types.JAVA_OBJECT:
-				case Types.LONGNVARCHAR:
-				case Types.LONGVARBINARY:
-				case Types.LONGVARCHAR:
 				default:
 					throw new IllegalArgumentException("UnsupportedType: " + sqlType);
 			}
@@ -825,14 +825,6 @@ public class SelectBuilder implements Selectable {
 				}
 			}
 		}
-		if (offset != 0) {
-			if (newLine) {
-				buf.append("\n");
-			} else {
-				buf.append(" ");
-			}
-			buf.append("OFFSET ").append(offset == OFFSET_PARAM ? "?" : Integer.toString(offset));
-		}
 		if (limit != 0) {
 			if (newLine) {
 				buf.append("\n");
@@ -840,6 +832,14 @@ public class SelectBuilder implements Selectable {
 				buf.append(" ");
 			}
 			buf.append("LIMIT ").append(limit == LIMIT_PARAM ? "?" : limit == 0 ? "ALL" : Integer.toString(limit));
+		}
+		if (offset != 0) {
+			if (newLine) {
+				buf.append("\n");
+			} else {
+				buf.append(" ");
+			}
+			buf.append("OFFSET ").append(offset == OFFSET_PARAM ? "?" : Integer.toString(offset));
 		}
 		if (forUpdate != null) {
 			buf.append(forUpdate);
